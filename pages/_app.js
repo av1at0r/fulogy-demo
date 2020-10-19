@@ -1,6 +1,11 @@
 import { CssBaseline, ThemeProvider } from "@material-ui/core";
+import "fontsource-open-sans";
 import Head from "next/head";
+import { Provider } from "react-redux";
+import store from "../src/store";
 import theme from "../src/styles/theme";
+
+
 function MyApp({ Component, pageProps }) {
   React.useEffect(() => {
     // Remove the server-side injected CSS.
@@ -9,8 +14,9 @@ function MyApp({ Component, pageProps }) {
       jssStyles.parentElement.removeChild(jssStyles);
     }
   }, []);
+
   return (
-    <>
+    <Provider store={store}>
       <Head>
         <meta
           name="viewport"
@@ -22,7 +28,7 @@ function MyApp({ Component, pageProps }) {
           <Component {...pageProps} />
         </CssBaseline>
       </ThemeProvider>
-    </>
+    </Provider>
   );
 }
 

@@ -1,5 +1,4 @@
 import {
-  Avatar,
   createStyles,
   Divider,
   IconButton,
@@ -9,6 +8,7 @@ import {
 import NotificationsNoneIcon from "@material-ui/icons/NotificationsNone";
 import Link from "next/link";
 import React from "react";
+import UserAvatar from "./UserAvatar";
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) =>
       listStyle: "none",
     },
     divider: {
-      backgroundColor: theme.palette.secondary.main,
+      backgroundColor: "currentColor",
       marginRight: 20,
     },
     userProfile: {
@@ -40,28 +40,37 @@ const useStyles = makeStyles((theme) =>
     notificationButton: {
       marginRight: -2,
       padding: 2,
-      fontSize: 36,
+      fontSize: "2.25rem",
+    },
+    profileLink: {
+      fontWeight: 600,
+      textDecoration: "none",
     },
   })
 );
 
-function Header(props) {
+function Header({ name, ...props }) {
   const classes = useStyles(props);
   return (
     <header className={classes.root}>
       <ul className={classes.controls}>
         <li>
-          <IconButton color="secondary" className={classes.notificationButton}>
+          <IconButton color="inherit" className={classes.notificationButton}>
             <NotificationsNoneIcon fontSize="inherit" />
           </IconButton>
         </li>
       </ul>
       <Divider orientation="vertical" flexItem className={classes.divider} />
       <div className={classes.userProfile}>
-        <Avatar className={classes.avatar} src="/images/avatar-fallback.png" />
-        <Link href="/profile">
-          <Typography color="inherit" variant="body1">
-            Иванова А.
+        <UserAvatar className={classes.avatar} />
+        <Link passHref href="/profile">
+          <Typography
+            className={classes.profileLink}
+            component="a"
+            color="inherit"
+            variant="body1"
+          >
+            {name}
           </Typography>
         </Link>
       </div>
