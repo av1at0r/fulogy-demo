@@ -24,9 +24,6 @@ const useStyles = makeStyles((theme) =>
       color: theme.palette.text.secondary,
     },
     title: {
-      fontWeight: 600,
-      fontSize: "1.125rem",
-      lineHeight: "1.5625",
       textTransform: "uppercase",
     },
     breadcrumbs: {
@@ -46,10 +43,7 @@ const useStyles = makeStyles((theme) =>
     avatar: {
       marginRight: 42,
     },
-    userName: {
-      fontSize: 30,
-      fontWeight: 600,
-    },
+
     formActionButton: {
       marginLeft: "auto",
     },
@@ -76,7 +70,7 @@ export default function ProfileView(props) {
   return (
     <main className={classes.root}>
       <div className={classes.headline}>
-        <Typography compoent="h1" variant="h6" className={classes.title}>
+        <Typography compoent="h1" variant="subtitle2" className={classes.title}>
           Личный Профиль
         </Typography>
         <nav className={classes.breadcrumbs}>
@@ -94,7 +88,7 @@ export default function ProfileView(props) {
         </nav>
         <Paper className={classes.profileBar}>
           <UserAvatar className={classes.avatar} size="lg" />
-          <Typography component="h2" className={classes.userName}>
+          <Typography component="h2" variant="h5" >
             {info?.name}
           </Typography>
           <Button

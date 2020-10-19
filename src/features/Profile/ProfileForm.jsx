@@ -15,6 +15,7 @@ import ConfirmationDialog from "../../components/ConfirmationDialog";
 import CustomButton from "../../components/CustomButton";
 import TextFieldFinalForm from "../../components/TextFieldFinalForm";
 import { createEmailValidator, createNameValidator, createNameSymbolsValidator, createPhoneValidator } from "../../form-utils/validators";
+import theme from "../../styles/theme";
 import useUpdateProfile from "./hooks/useUpdateProfile";
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -60,6 +61,7 @@ const useStyles = makeStyles((theme) =>
 );
 
 const formTheme = createMuiTheme({
+  ...theme,
   palette: {
     primary: {
       main: "#359FF4",

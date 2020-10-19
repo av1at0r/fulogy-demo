@@ -13,11 +13,11 @@ const useStyles = makeStyles((theme) => {
     icon: {
       display: "flex",
       alignItems: "center",
-      fontSize: 36,
+      fontSize: "2.25rem",
       color: theme.palette.primary.main,
     },
     text: {
-      fontSize: "1.125rem",
+ 
       marginLeft: 25,
     },
   });
@@ -28,7 +28,7 @@ export default function ProfileInfoItem({ icon, text, className, ...props }) {
   return (
     <div className={cn(classes.root, className)}>
       <div className={classes.icon}>{icon}</div>
-      <Typography className={classes.text}>{text}</Typography>
+      <Typography variant="subtitle1" className={classes.text}>{text}</Typography>
     </div>
   );
 }

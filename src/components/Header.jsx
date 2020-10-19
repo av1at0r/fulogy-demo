@@ -43,7 +43,6 @@ const useStyles = makeStyles((theme) =>
       fontSize: "2.25rem",
     },
     profileLink: {
-      fontWeight: 600,
       textDecoration: "none",
     },
   })
@@ -67,8 +66,8 @@ function Header({ name, ...props }) {
           <Typography
             className={classes.profileLink}
             component="a"
-            color="inherit"
-            variant="body1"
+            color="textSecondary"
+            variant="body2"
           >
             {name}
           </Typography>

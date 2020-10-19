@@ -2,7 +2,7 @@ import { TextField } from "@material-ui/core";
 import React from "react";
 
 export default function TextFieldFinalForm({
-  input: { value, name, ...input },
+  input: { value, name, InputProps, ...input },
   meta,
   ...rest
 }) {
@@ -11,7 +11,10 @@ export default function TextFieldFinalForm({
     <TextField
       value={value}
       name={name}
-      InputProps={input}
+      InputProps={{
+        ...InputProps,
+        ...input
+      }}
       {...rest}
       helperText={showError ? meta.error : undefined}
       error={showError}

@@ -13,6 +13,6 @@ const useStyles = makeStyles((theme) =>
 export default function CustomDialogTitle(props) {
   const classes = useStyles(props);
   return (
-    <Typography align="center" variant="h5" {...props} classes={classes} />
+    <Typography align="center" variant="h6" {...props} classes={classes} />
   );
 }
