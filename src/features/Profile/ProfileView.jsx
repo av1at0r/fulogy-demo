@@ -71,7 +71,7 @@ export default function ProfileView(props) {
     setShowEditForm(!showEditForm);
   }, [showEditForm]);
 
-  const profile = useProfileInfo();
+  const { info } = useProfileInfo();
 
   return (
     <main className={classes.root}>
@@ -95,7 +95,7 @@ export default function ProfileView(props) {
         <Paper className={classes.profileBar}>
           <UserAvatar className={classes.avatar} size="lg" />
           <Typography component="h2" className={classes.userName}>
-            {profile.name}
+            {info?.name}
           </Typography>
           <Button
             className={classes.formActionButton}
@@ -109,7 +109,7 @@ export default function ProfileView(props) {
         </Paper>
       </div>
       <Paper className={classes.paper}>
-        {!showEditForm ? <ProfileInfo profile={profile} /> : <ProfileForm initialValues={profile} />}
+        {!showEditForm ? <ProfileInfo profile={info} /> : <ProfileForm initialValues={info} />}
       </Paper>
     </main>
   );

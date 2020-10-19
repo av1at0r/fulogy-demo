@@ -13,5 +13,5 @@ export default function useProfileInfo() {
     return `${lastName} ${firstName.charAt(0).toUpperCase()}.`;
   }, [info]);
 
-  return { ...info, shortName };
+  return { info, shortName };
 }

@@ -1,4 +1,5 @@
 import {
+  Button,
   createMuiTheme,
   createStyles,
   makeStyles,
@@ -13,6 +14,7 @@ import AlertDialog from "../../components/AlertDialog";
 import ConfirmationDialog from "../../components/ConfirmationDialog";
 import CustomButton from "../../components/CustomButton";
 import TextFieldFinalForm from "../../components/TextFieldFinalForm";
+import { createEmailValidator, createNameValidator, createNameSymbolsValidator, createPhoneValidator } from "../../form-utils/validators";
 import useUpdateProfile from "./hooks/useUpdateProfile";
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -28,17 +30,18 @@ const useStyles = makeStyles((theme) =>
     },
     fieldWrapper: {
       display: "flex",
-      alignItems: "center",
       minHeight: 97,
       minWidth: "33.33%",
       paddingRight: 77,
       paddingLeft: 32,
+      paddingTop: 23,
       "& + &": {
         borderLeft: `1px solid #CAE7FE`,
       },
     },
 
     icon: {
+      marginTop: 11,
       flexShrink: 0,
       marginRight: 46,
       fontSize: 36,
@@ -49,6 +52,10 @@ const useStyles = makeStyles((theme) =>
       alignSelf: "center",
       marginTop: 29,
     },
+
+    submit: {
+      display: 'none',
+    }
   })
 );
 
@@ -65,6 +72,10 @@ const formTheme = createMuiTheme({
     },
   },
 });
+
+const nameValidator = createNameValidator("Вы неверно указали имя")
+const emailValidator = createEmailValidator("Вы неверно указали e-mail")
+const phoneValidator = createPhoneValidator("Вы неверно указали номер телефона")
 
 export default function ProfileForm({ initialValues, ...props }) {
   const classes = useStyles(props);
@@ -84,15 +95,6 @@ export default function ProfileForm({ initialValues, ...props }) {
   }, []);
   const { updateProfile, success } = useUpdateProfile();
 
-  const handleSubmit = useCallback(
-    (e) => {
-      console.log(e);
-      e.preventDefault();
-      handleShowSaveDialog();
-    },
-    [handleShowSaveDialog]
-  );
-
   useEffect(() => {
     if (success) {
       setShowSaveDialog(false);
@@ -101,9 +103,9 @@ export default function ProfileForm({ initialValues, ...props }) {
   }, [success]);
 
   return (
-    <Form onSubmit={updateProfile} initialValues={initialValues}>
-      {({ form }) => (
-        <form className={classes.root} onSubmit={() => {console.log('submit')}}>
+    <Form onSubmit={handleShowSaveDialog} initialValues={initialValues}>
+      {({ form, handleSubmit, values }) => (
+        <form className={classes.root} onSubmit={handleSubmit}>
           <div className={classes.fields}>
             <ThemeProvider theme={formTheme}>
               <div className={classes.fieldWrapper}>
@@ -116,6 +118,7 @@ export default function ProfileForm({ initialValues, ...props }) {
                   name="name"
                   component={TextFieldFinalForm}
                   InputLabelProps={{ shrink: true }}
+                  validate={nameValidator}
                 />
               </div>
               <div className={classes.fieldWrapper}>
@@ -128,6 +131,7 @@ export default function ProfileForm({ initialValues, ...props }) {
                   name="email"
                   component={TextFieldFinalForm}
                   InputLabelProps={{ shrink: true }}
+                  validate={emailValidator}
                 />
               </div>
               <div className={classes.fieldWrapper}>
@@ -140,6 +144,7 @@ export default function ProfileForm({ initialValues, ...props }) {
                   name="phone"
                   component={TextFieldFinalForm}
                   InputLabelProps={{ shrink: true }}
+                  validate={phoneValidator}
                 />
               </div>
             </ThemeProvider>
@@ -148,8 +153,7 @@ export default function ProfileForm({ initialValues, ...props }) {
             className={classes.save}
             color="primary"
             variant="contained"
-            type="button"
-            onClick={handleShowSaveDialog}
+            type="submit"
           >
             Сохранить изменения
           </CustomButton>
@@ -159,7 +163,7 @@ export default function ProfileForm({ initialValues, ...props }) {
             cancelButtonText="Не сохранять"
             open={showSaveDialog}
             onClose={handleHideSaveDialog}
-            onConfirm={handleSubmit}
+            onConfirm={() => updateProfile(values)}
           />
           <AlertDialog
             title="Данные успешно сохранены"

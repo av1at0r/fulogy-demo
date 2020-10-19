@@ -25,14 +25,14 @@ export default function ProfileInfo({ profile, ...props }) {
       <li>
         <ProfileInfoItem
           icon={<AlternateEmailIcon fontSize="inherit" />}
-          text={profile.email ?? "Укажите email"}
+          text={profile?.email ?? "Укажите email"}
         />
       </li>
       <Divider className={classes.divider} component="li" />
       <li>
         <ProfileInfoItem
           icon={<CallIcon fontSize="inherit" />}
-          text={profile.phone ?? "Укажите номер телефона"}
+          text={profile?.phone ?? "Укажите номер телефона"}
         />
       </li>
     </ul>

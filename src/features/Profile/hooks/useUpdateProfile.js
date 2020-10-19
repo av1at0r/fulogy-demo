@@ -1,6 +1,7 @@
 import { useCallback, useState } from "react";
 import { useDispatch } from "react-redux";
-import api from "../../../api";
+import sharedApi from "../../../../shared/api";
+
 import { updateProfileInfoLocal } from "../store/profileSlice";
 
 export default function useUpdateProfile() {
@@ -12,7 +13,7 @@ export default function useUpdateProfile() {
     setLoading(true);
     setSuccess(false);
     try {
-      await api("/api/update-profile", {
+      await sharedApi("/api/update-profile", {
         method: "POST",
         json: profile,
       });

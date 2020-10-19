@@ -5,6 +5,9 @@ import CustomDialogTitle from "./DialogTitle";
 const useStyles = makeStyles((theme) =>
   createStyles({
     paper: {
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
       minHeight: 318,
       paddingTop: 84,
     },
