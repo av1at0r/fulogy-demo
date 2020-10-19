@@ -13,6 +13,11 @@ const useStyles = makeStyles((theme) =>
       backgroundSize: "contain",
       backgroundColor: theme.palette.background.default,
     },
+    [theme.breakpoints.down('sm')]: {
+      root: {
+        backgroundSize: '100% 200px'
+      }
+    }
   })
 );
 

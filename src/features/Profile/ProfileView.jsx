@@ -53,6 +53,11 @@ const useStyles = makeStyles((theme) =>
     paper: {
       marginTop: 24,
     },
+    [theme.breakpoints.down('sm')]: {
+      root: {
+        padding: "18px 10px 10px 10px",
+      },
+    }
   })
 );
 
@@ -75,13 +80,13 @@ export default function ProfileView(props) {
         </Typography>
         <nav className={classes.breadcrumbs}>
           <NextLink href="/" passHref>
-            <Link component="a" color="textSecondary">
+            <Link variant="body1" component="a" color="textSecondary">
               Главная
             </Link>
           </NextLink>
           /
           <NextLink href="/profile" passHref>
-            <Link component="a" color="textSecondary">
+            <Link variant="body1" component="a" color="textSecondary">
               Личный профиль
             </Link>
           </NextLink>

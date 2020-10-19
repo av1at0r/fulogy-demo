@@ -1,6 +1,7 @@
 import {
   createStyles,
   Divider,
+  Hidden,
   IconButton,
   makeStyles,
   Typography
@@ -33,18 +34,30 @@ const useStyles = makeStyles((theme) =>
     userProfile: {
       display: "flex",
       alignItems: "center",
+      textDecoration: "none",
     },
-    avatar: {
-      marginRight: 20,
+    userName: {
+      marginLeft: 20,
     },
     notificationButton: {
       marginRight: -2,
       padding: 2,
       fontSize: "2.25rem",
     },
-    profileLink: {
-      textDecoration: "none",
-    },
+    [theme.breakpoints.down('sm')]: {
+      root: {
+        padding: `17px 10px`
+      },
+      notificationButton: {
+        fontSize: '1.5rem'
+      },
+      divider: {
+        marginRight: 10,
+      },
+      controls: {
+        padding: `0 10px`
+      }
+    }
   })
 );
 
@@ -60,19 +73,23 @@ function Header({ name, ...props }) {
         </li>
       </ul>
       <Divider orientation="vertical" flexItem className={classes.divider} />
-      <div className={classes.userProfile}>
-        <UserAvatar className={classes.avatar} />
-        <Link passHref href="/profile">
-          <Typography
-            className={classes.profileLink}
-            component="a"
-            color="textSecondary"
-            variant="body2"
-          >
-            {name}
-          </Typography>
-        </Link>
-      </div>
+
+      <Link passHref href="/profile">
+        <a className={classes.userProfile}>
+          <UserAvatar />
+          <Hidden implementation="css" smDown>
+            <Typography
+              className={classes.userName}
+              component="span"
+              color="textSecondary"
+              variant="body2"
+            >
+              {name}
+            </Typography>
+          </Hidden>
+        </a>
+      </Link>
+
     </header>
   );
 }
