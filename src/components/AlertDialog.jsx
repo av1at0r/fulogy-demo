@@ -1,13 +1,14 @@
-import { createStyles, Dialog, makeStyles } from "@material-ui/core";
+import { createStyles, Hidden, makeStyles } from "@material-ui/core";
 import React from "react";
 import CustomButton from "./CustomButton";
+import CustomDialog from "./CustomDialog";
 import CustomDialogTitle from "./DialogTitle";
 const useStyles = makeStyles((theme) =>
   createStyles({
     paper: {
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
       minHeight: 318,
       paddingTop: 84,
     },
@@ -15,6 +16,12 @@ const useStyles = makeStyles((theme) =>
     closeButton: {
       marginTop: 42,
     },
+    [theme.breakpoints.down('sm')]: {
+      paper: {
+        minHeight: 0,
+        padding: 30
+      }
+    }
   })
 );
 
@@ -26,7 +33,7 @@ export default function AlertDialog({
 }) {
   const classes = useStyles();
   return (
-    <Dialog
+    <CustomDialog
       maxWidth="sm"
       fullWidth
       {...props}
@@ -37,14 +44,17 @@ export default function AlertDialog({
       <CustomDialogTitle component="h1" id="alert-dialog-title">
         {title}
       </CustomDialogTitle>
-      <CustomButton
-        className={classes.closeButton}
-        variant="contained"
-        color="primary"
-        onClick={onClose}
-      >
-        {closeButtonText}
-      </CustomButton>
-    </Dialog>
+      <Hidden implementation="css" smDown>
+        <CustomButton
+          autoFocus
+          className={classes.closeButton}
+          variant="contained"
+          color="primary"
+          onClick={onClose}
+        >
+          {closeButtonText}
+        </CustomButton>
+      </Hidden>
+    </CustomDialog>
   );
 }

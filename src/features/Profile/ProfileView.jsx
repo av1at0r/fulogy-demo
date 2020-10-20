@@ -1,6 +1,8 @@
 import {
   Button,
   createStyles,
+  Hidden,
+  IconButton,
   Link,
   makeStyles,
   Paper,
@@ -40,11 +42,12 @@ const useStyles = makeStyles((theme) =>
       borderRadius: theme.shape.borderRadius,
       backgroundColor: theme.palette.secondary.main,
     },
+
     avatar: {
       marginRight: 42,
     },
 
-    formActionButton: {
+    formActionButtonWrapper: {
       marginLeft: "auto",
     },
     formActionButtonText: {
@@ -53,14 +56,28 @@ const useStyles = makeStyles((theme) =>
     paper: {
       marginTop: 24,
     },
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down("sm")]: {
       root: {
-        padding: "18px 10px 10px 10px",
+        padding: "1px 10px 10px 10px",
       },
-    }
+      profileBar: {
+        marginTop: 10,
+        padding: "15px 10px",
+      },
+      avatar: {
+        marginRight: 10,
+      },
+
+      formActionButton: {
+        fontSize: 24,
+        padding: 8,
+      },
+      paper: {
+        marginTop: 10,
+      },
+    },
   })
 );
-
 
 export default function ProfileView(props) {
   const classes = useStyles(props);
@@ -68,6 +85,10 @@ export default function ProfileView(props) {
 
   const toggleShowEditForm = useCallback(() => {
     setShowEditForm(!showEditForm);
+  }, [showEditForm]);
+
+  const handleCloseEditForm = useCallback(() => {
+    setShowEditForm(false);
   }, [showEditForm]);
 
   const { info } = useProfileInfo();
@@ -80,35 +101,58 @@ export default function ProfileView(props) {
         </Typography>
         <nav className={classes.breadcrumbs}>
           <NextLink href="/" passHref>
-            <Link variant="body1" component="a" color="textSecondary">
+            <Link variant="body2" component="a" color="textSecondary">
               Главная
             </Link>
           </NextLink>
           /
           <NextLink href="/profile" passHref>
-            <Link variant="body1" component="a" color="textSecondary">
+            <Link variant="body2" component="a" color="textSecondary">
               Личный профиль
             </Link>
           </NextLink>
         </nav>
         <Paper className={classes.profileBar}>
           <UserAvatar className={classes.avatar} size="lg" />
-          <Typography component="h2" variant="h5" >
-            {info?.name}
+          <Typography component="h2" variant="h5">
+            {info?.name || "Укажите ваше имя"}
           </Typography>
-          <Button
-            className={classes.formActionButton}
-            color="inherit"
-            endIcon={showEditForm ? <CloseIcon /> : <EditIcon />}
-            classes={{ text: classes.formActionButtonText }}
-            onClick={toggleShowEditForm}
+          <Hidden
+            implementation="css"
+            smDown
+            className={classes.formActionButtonWrapper}
           >
-            {showEditForm ? "Закрыть" : "Редактировать"}
-          </Button>
+            <Button
+              className={classes.formActionButton}
+              color="inherit"
+              endIcon={showEditForm ? <CloseIcon /> : <EditIcon />}
+              classes={{ text: classes.formActionButtonText }}
+              onClick={toggleShowEditForm}
+            >
+              {showEditForm ? "Закрыть" : "Редактировать"}
+            </Button>
+          </Hidden>
+          <Hidden
+            implementation="css"
+            mdUp
+            className={classes.formActionButtonWrapper}
+          >
+            <IconButton
+              className={classes.formActionButton}
+              color="inherit"
+              onClick={toggleShowEditForm}
+            >
+              {showEditForm ? <CloseIcon /> : <EditIcon />}
+            </IconButton>
+          </Hidden>
         </Paper>
       </div>
       <Paper className={classes.paper}>
-        {!showEditForm ? <ProfileInfo profile={info} /> : <ProfileForm initialValues={info} />}
+        {!showEditForm ? (
+          <ProfileInfo profile={info} />
+        ) : (
+          <ProfileForm initialValues={info} onClose={handleCloseEditForm} />
+        )}
       </Paper>
     </main>
   );

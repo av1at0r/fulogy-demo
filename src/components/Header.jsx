@@ -38,26 +38,27 @@ const useStyles = makeStyles((theme) =>
     },
     userName: {
       marginLeft: 20,
+      fontWeight: 600,
     },
     notificationButton: {
       marginRight: -2,
       padding: 2,
       fontSize: "2.25rem",
     },
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down("sm")]: {
       root: {
-        padding: `17px 10px`
+        padding: `17px 10px`,
       },
       notificationButton: {
-        fontSize: '1.5rem'
+        fontSize: "1.5rem",
       },
       divider: {
         marginRight: 10,
       },
       controls: {
-        padding: `0 10px`
-      }
-    }
+        padding: `0 10px`,
+      },
+    },
   })
 );
 
@@ -77,19 +78,20 @@ function Header({ name, ...props }) {
       <Link passHref href="/profile">
         <a className={classes.userProfile}>
           <UserAvatar />
-          <Hidden implementation="css" smDown>
-            <Typography
-              className={classes.userName}
-              component="span"
-              color="textSecondary"
-              variant="body2"
-            >
-              {name}
-            </Typography>
-          </Hidden>
+          {name && (
+            <Hidden implementation="css" smDown>
+              <Typography
+                className={classes.userName}
+                component="span"
+                color="textSecondary"
+                variant="body1"
+              >
+                {name}
+              </Typography>
+            </Hidden>
+          )}
         </a>
       </Link>
-
     </header>
   );
 }

@@ -1,9 +1,10 @@
 import {
-  Button,
   createMuiTheme,
   createStyles,
+  Hidden,
   makeStyles,
-  ThemeProvider
+  ThemeProvider,
+  useTheme
 } from "@material-ui/core";
 import AlternateEmailIcon from "@material-ui/icons/AlternateEmail";
 import AssignmentIndIcon from "@material-ui/icons/AssignmentInd";
@@ -14,8 +15,13 @@ import AlertDialog from "../../components/AlertDialog";
 import ConfirmationDialog from "../../components/ConfirmationDialog";
 import CustomButton from "../../components/CustomButton";
 import TextFieldFinalForm from "../../components/TextFieldFinalForm";
-import { createEmailValidator, createNameValidator, createNameSymbolsValidator, createPhoneValidator } from "../../form-utils/validators";
-import theme from "../../styles/theme";
+import {
+  createEmailValidator,
+  createNameValidator,
+  createPhoneValidator
+} from "../../form-utils/validators";
+import useDialog from "../../hooks/useDialog";
+import theme, { defaultTheme } from "../../styles/theme";
 import useUpdateProfile from "./hooks/useUpdateProfile";
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -49,14 +55,49 @@ const useStyles = makeStyles((theme) =>
       color: theme.palette.primary.main,
     },
 
+    input: {
+      height: theme.typography.pxToRem(19),
+      lineHeight: theme.typography.pxToRem(19),
+    },
+
     save: {
       alignSelf: "center",
       marginTop: 29,
     },
 
     submit: {
-      display: 'none',
-    }
+      display: "none",
+    },
+
+    [theme.breakpoints.down("md")]: {
+      root: {
+        padding: "17px 23px",
+      },
+      fieldWrapper: {
+        paddingRight: 32,
+      },
+      fields: {
+        marginRight: -32,
+      },
+    },
+
+    [theme.breakpoints.down("sm")]: {
+      root: {
+        padding: "17px 23px",
+      },
+      fields: {
+        margin: 0,
+        flexDirection: "column",
+      },
+      fieldWrapper: {
+        minHeight: 0,
+        padding: 0,
+        "& + &": {
+          marginTop: 39,
+          border: 0,
+        },
+      },
+    },
   })
 );
 
@@ -73,45 +114,73 @@ const formTheme = createMuiTheme({
       secondary: "rgba(49, 49, 49, 0.4)",
     },
   },
+  shape: {
+    borderRadius: defaultTheme.shape.borderRadius,
+  },
 });
 
-const nameValidator = createNameValidator("Вы неверно указали имя")
-const emailValidator = createEmailValidator("Вы неверно указали e-mail")
-const phoneValidator = createPhoneValidator("Вы неверно указали номер телефона")
+const nameValidator = createNameValidator("Вы неверно указали имя");
+const emailValidator = createEmailValidator("Вы неверно указали e-mail");
+const phoneValidator = createPhoneValidator(
+  "Вы неверно указали номер телефона"
+);
 
-export default function ProfileForm({ initialValues, ...props }) {
+export default function ProfileForm({
+  initialValues,
+  handleSubmit,
+  onClose,
+  ...props
+}) {
+  //Включаем анимацию исчезновения диалога, если
+  //он был закрыт кнопкой, а не после успешного сохранения
+  const [
+    enableConfirmationTransition,
+    setEnableConfirmationTransition,
+  ] = useState(false);
+
+  const confirmationDialog = useDialog();
+
+  const handleConfirmationClose = useCallback(() => {
+    setEnableConfirmationTransition(true);
+    confirmationDialog.closeDialog();
+  }, [confirmationDialog.closeDialog]);
+
+  const handleConfirmationClosed = useCallback(() => {
+    setEnableConfirmationTransition(false);
+  }, []);
+
   const classes = useStyles(props);
+  const theme = useTheme();
 
-  const [showSavedDialog, setShowSavedDialog] = useState(false);
-  const handleHideSavedDialog = useCallback(() => {
-    setShowSavedDialog(false);
-  }, []);
+  const alertDialog = useDialog();
 
-  const [showSaveDialog, setShowSaveDialog] = useState(false);
-
-  const handleShowSaveDialog = useCallback(() => {
-    setShowSaveDialog(true);
-  }, []);
-  const handleHideSaveDialog = useCallback(() => {
-    setShowSaveDialog(false);
-  }, []);
-  const { updateProfile, success } = useUpdateProfile();
+  const { updateProfile, success, loading } = useUpdateProfile();
 
   useEffect(() => {
     if (success) {
-      setShowSaveDialog(false);
-      setShowSavedDialog(true);
+      confirmationDialog.closeDialog();
+      alertDialog.openDialog();
     }
-  }, [success]);
+  }, [confirmationDialog.closeDialog, alertDialog.openDialog, success]);
+
+  const handleCloseAlertDialog = useCallback(() => {
+    alertDialog.closeDialog();
+    onClose();
+  }, [onClose, alertDialog.closeDialog]);
 
   return (
-    <Form onSubmit={handleShowSaveDialog} initialValues={initialValues}>
-      {({ form, handleSubmit, values }) => (
+    <Form
+      onSubmit={confirmationDialog.openDialog}
+      initialValues={initialValues}
+    >
+      {({ handleSubmit, values }) => (
         <form className={classes.root} onSubmit={handleSubmit}>
           <div className={classes.fields}>
             <ThemeProvider theme={formTheme}>
               <div className={classes.fieldWrapper}>
-                <AssignmentIndIcon className={classes.icon} />
+                <Hidden implementation="css" mdDown>
+                  <AssignmentIndIcon className={classes.icon} />
+                </Hidden>
                 <Field
                   fullWidth
                   label="Фамилия и имя"
@@ -120,11 +189,14 @@ export default function ProfileForm({ initialValues, ...props }) {
                   name="name"
                   component={TextFieldFinalForm}
                   InputLabelProps={{ shrink: true }}
+                  InputProps={{ classes: { input: classes.input } }}
                   validate={nameValidator}
                 />
               </div>
               <div className={classes.fieldWrapper}>
-                <AlternateEmailIcon className={classes.icon} />
+                <Hidden implementation="css" mdDown>
+                  <AlternateEmailIcon className={classes.icon} />
+                </Hidden>
                 <Field
                   fullWidth
                   label="E-mail"
@@ -133,11 +205,14 @@ export default function ProfileForm({ initialValues, ...props }) {
                   name="email"
                   component={TextFieldFinalForm}
                   InputLabelProps={{ shrink: true }}
+                  InputProps={{ classes: { input: classes.input } }}
                   validate={emailValidator}
                 />
               </div>
               <div className={classes.fieldWrapper}>
-                <CallIcon className={classes.icon} />
+                <Hidden implementation="css" mdDown>
+                  <CallIcon className={classes.icon} />
+                </Hidden>
                 <Field
                   fullWidth
                   label="Номер телефона"
@@ -146,6 +221,7 @@ export default function ProfileForm({ initialValues, ...props }) {
                   name="phone"
                   component={TextFieldFinalForm}
                   InputLabelProps={{ shrink: true }}
+                  InputProps={{ classes: { input: classes.input } }}
                   validate={phoneValidator}
                 />
               </div>
@@ -163,15 +239,27 @@ export default function ProfileForm({ initialValues, ...props }) {
             title="Сохранить изменения?"
             confirmButtonText="Сохранить"
             cancelButtonText="Не сохранять"
-            open={showSaveDialog}
-            onClose={handleHideSaveDialog}
+            open={confirmationDialog.open}
+            onClose={handleConfirmationClose}
+            onExited={handleConfirmationClosed}
             onConfirm={() => updateProfile(values)}
+            submitting={loading}
+            transitionDuration={{
+              enter: theme.transitions.duration.enteringScreen,
+              exit: enableConfirmationTransition
+                ? theme.transitions.duration.leavingScreen
+                : 0,
+            }}
           />
           <AlertDialog
+            transitionDuration={{
+              enter: 0,
+              exit: theme.transitions.duration.leavingScreen,
+            }}
             title="Данные успешно сохранены"
             closeButtonText="Хорошо"
-            open={showSavedDialog}
-            onClose={handleHideSavedDialog}
+            open={alertDialog.open}
+            onClose={handleCloseAlertDialog}
           />
         </form>
       )}

@@ -13,13 +13,24 @@ const useStyles = makeStyles((theme) => {
     icon: {
       display: "flex",
       alignItems: "center",
-      fontSize: "2.25rem",
+      fontSize: theme.typography.pxToRem(36),
       color: theme.palette.primary.main,
     },
     text: {
- 
       marginLeft: 25,
     },
+    [theme.breakpoints.down('sm')]: {
+      root: {
+        paddingLeft: 10,
+        minHeight: 64,
+      },
+      icon: {
+        fontSize: theme.typography.pxToRem(24),
+      },
+      text: {
+        marginLeft: 10,
+      }
+    }
   });
 });
 

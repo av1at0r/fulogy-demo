@@ -1,12 +1,13 @@
 import {
   createStyles,
-  Dialog,
+
   IconButton,
   makeStyles
 } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import React from "react";
 import CustomButton from "./CustomButton";
+import CustomDialog from "./CustomDialog";
 import CustomDialogTitle from "./DialogTitle";
 
 const useStyles = makeStyles((theme) =>
@@ -32,6 +33,18 @@ const useStyles = makeStyles((theme) =>
         marginTop: 28,
       },
     },
+    [theme.breakpoints.down("sm")]: {
+      headline: {
+        padding: 8,
+      },
+      paper: {
+        paddingBottom: 168,
+        minHeight: 'none',
+      },
+      controls: {
+        marginTop: 40,
+      },
+    },
   })
 );
 
@@ -41,12 +54,13 @@ export default function ConfirmationDialog({
   confirmButtonText,
   cancelButtonText,
   onConfirm,
+  submitting,
   ...props
 }) {
   const classes = useStyles(props);
 
   return (
-    <Dialog
+    <CustomDialog
       maxWidth="sm"
       fullWidth
       {...props}
@@ -64,10 +78,12 @@ export default function ConfirmationDialog({
       </CustomDialogTitle>
       <div className={classes.controls}>
         <CustomButton
+          autoFocus
           className={classes.control}
           variant="contained"
           color="primary"
           onClick={onConfirm}
+          disabled={submitting}
         >
           {confirmButtonText}
         </CustomButton>
@@ -80,6 +96,6 @@ export default function ConfirmationDialog({
           {cancelButtonText}
         </CustomButton>
       </div>
-    </Dialog>
+    </CustomDialog>
   );
 }

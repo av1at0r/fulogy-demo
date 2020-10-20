@@ -5,43 +5,59 @@ import defaultShadows from "@material-ui/core/styles/shadows";
 
 const shadows = [...defaultShadows];
 shadows[1] = `0px 4px 10px rgba(0, 0, 0, 0.15)`;
-const defaultTheme = createMuiTheme({});
+export const defaultTheme = createMuiTheme({});
 
 const theme = createMuiTheme({
   typography: {
     fontFamily: [`"Open Sans"`, `"Segoe UI"`, `Tahoma`, `sans-serif`].join(","),
     h5: {
-      fontSize: '1.875rem',
-      lineHeight: 16 / 40,
+      fontSize: defaultTheme.typography.pxToRem(30),
+      lineHeight: 40 / 30,
       fontWeight: 600,
+      [defaultTheme.breakpoints.down('sm')]: {
+        fontSize: defaultTheme.typography.pxToRem(14),
+        lineHeight: 19 / 14,
+      }
     },
     h6: {
-      fontSize: '1.5rem',
-      lineHeight: 2,
+      fontSize: defaultTheme.typography.pxToRem(24),
+      lineHeight: 32/24,
       fontWeight: 600,
+      [defaultTheme.breakpoints.down('sm')]: {
+        fontSize: defaultTheme.typography.pxToRem(18),
+        lineHeight: 25 / 18,
+      }
     },
     subtitle1: {
-      fontWeight: 500,
-      fontSize: '1.125rem',
-      lineHeight: 24 / 16,
+      fontWeight: 400,
+      fontSize: defaultTheme.typography.pxToRem(18),
+      lineHeight: 24 / 18,
+      [defaultTheme.breakpoints.down('sm')]: {
+        fontSize: defaultTheme.typography.pxToRem(14),
+        lineHeight: 19 / 14,
+      }
     },
     subtitle2: {
       fontWeight: 600,
-      fontSize: '1.125rem',
-      lineHeight: 24 / 16,
+      fontSize: defaultTheme.typography.pxToRem(18),
+      lineHeight: 24 / 18,
       [defaultTheme.breakpoints.down('sm')]: {
-        fontSize: '0.875rem',
+        fontSize: defaultTheme.typography.pxToRem(14),
+        lineHeight: 19 / 14,
       }
     },
     body1: {
-      fontSize: '0.875rem',
-      lineHeight: 19 / 16,
+      fontSize: defaultTheme.typography.pxToRem(14),
+      lineHeight: 19 / 14,
       fontWeight: 400,
     },
     body2: {
-      fontWeight: 600,
-      fontSize: '0.875rem',
-      lineHeight: 19 / 16,
+      fontSize: defaultTheme.typography.pxToRem(14),
+      lineHeight: 19 / 14,
+      [defaultTheme.breakpoints.down('sm')]: {
+        fontSize: defaultTheme.typography.pxToRem(12),
+        lineHeight: 16 / 12,
+      }
     }
   },
   palette: {

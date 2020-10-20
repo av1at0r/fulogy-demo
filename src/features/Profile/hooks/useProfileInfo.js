@@ -8,7 +8,7 @@ export default function useProfileInfo() {
     if (!info) {
       return "";
     }
-    const [lastName = "", firstName = ""] = info.name.split(" ");
+    const [lastName = "", firstName = ""] = (info.name || "").split(" ");
 
     return `${lastName} ${firstName.charAt(0).toUpperCase()}.`;
   }, [info]);
