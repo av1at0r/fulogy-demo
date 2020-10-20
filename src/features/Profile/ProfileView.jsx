@@ -13,6 +13,7 @@ import EditIcon from "@material-ui/icons/Edit";
 import NextLink from "next/link";
 import React, { useCallback, useState } from "react";
 import UserAvatar from "../../components/UserAvatar";
+import isClient from "../../utils/isClient";
 import useProfileInfo from "./hooks/useProfileInfo";
 import ProfileForm from "./ProfileForm";
 import ProfileInfo from "./ProfileInfo";
@@ -115,7 +116,7 @@ export default function ProfileView(props) {
         <Paper className={classes.profileBar}>
           <UserAvatar className={classes.avatar} size="lg" />
           <Typography component="h2" variant="h5">
-            {info?.name || "Укажите ваше имя"}
+            {isClient() ? info?.name ?? "Укажите ваше имя" : ""}
           </Typography>
           <Hidden
             implementation="css"
